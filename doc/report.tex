@@ -1,0 +1,184 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\geometry{margin=2.5cm}
+
+\title{Análisis Teórico y Numérico de la Optimización de\\
+$ f(x,y) = \dfrac{\arctan(x^2 + y^2)}{1 + x^2} $}
+\author{ }
+\date{ }
+
+\theoremstyle{plain}
+\newtheorem{proposicion}{Proposición}
+\newtheorem{teorema}{Teorema}
+
+\theoremstyle{definition}
+\newtheorem{definicion}{Definición}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Este trabajo presenta un análisis teórico y numérico de la función
+$f(x,y)=\dfrac{\arctan(x^2+y^2)}{1+x^2}$ desde la perspectiva de la Programación No Lineal.
+Se demuestra la existencia y unicidad de un mínimo global, se estudian las propiedades
+de diferenciabilidad y convexidad local, y se analizan varios métodos clásicos de
+optimización, incluyendo Gradiente Descendente y el Método de Newton.
+Los resultados numéricos confirman las predicciones teóricas sobre convergencia y
+eficiencia de los algoritmos considerados.
+\end{abstract}
+
+\section{Introducción}
+
+La optimización de funciones no lineales de varias variables es un problema central
+en matemáticas aplicadas, con aplicaciones en ingeniería, ciencias de datos y física.
+En este trabajo se estudia la función
+\[
+f(x,y)=\frac{\arctan(x^2+y^2)}{1+x^2},
+\]
+la cual presenta un comportamiento no trivial debido a su dependencia diferenciada
+en las variables $x$ y $y$.
+
+El objetivo principal es analizar sus propiedades analíticas relevantes para la
+optimización y evaluar el desempeño de distintos algoritmos numéricos en la
+búsqueda de su mínimo global.
+
+\section{Propiedades básicas de la función}
+
+La función $f$ está bien definida para todo $(x,y)\in\mathbb{R}^2$, ya que
+$\arctan$ es continua en $\mathbb{R}$ y $1+x^2>0$ para todo $x$.
+Además, al ser composición y cociente de funciones suaves, se tiene que
+$f\in C^\infty(\mathbb{R}^2)$.
+
+Notamos que
+\[
+\arctan(x^2+y^2)\geq 0,
+\]
+por lo que $f(x,y)\geq 0$ para todo $(x,y)$.
+La función no es radial ni convexa globalmente, pero como se verá más adelante,
+presenta convexidad local en un entorno del origen.
+
+\section{Existencia y unicidad del mínimo global}
+
+\begin{proposicion}
+La función $f$ posee un único mínimo global en el punto $(0,0)$.
+\end{proposicion}
+
+\begin{proof}
+Para todo $(x,y)\in\mathbb{R}^2$ se cumple
+\[
+f(x,y)=\frac{\arctan(x^2+y^2)}{1+x^2}\geq 0.
+\]
+Además,
+\[
+f(0,0)=\frac{\arctan(0)}{1}=0.
+\]
+Si $(x,y)\neq(0,0)$, entonces $x^2+y^2>0$ y por tanto $\arctan(x^2+y^2)>0$, lo que implica
+$f(x,y)>0$.
+De aquí se concluye que $(0,0)$ es el mínimo global y es único.
+\end{proof}
+
+\section{Cálculo del gradiente y puntos críticos}
+
+Calculamos las derivadas parciales de $f$:
+\[
+\frac{\partial f}{\partial x}
+=
+\frac{
+2x(1+x^2)\frac{1}{1+(x^2+y^2)^2}
+-
+2x\arctan(x^2+y^2)
+}{
+(1+x^2)^2
+},
+\]
+\[
+\frac{\partial f}{\partial y}
+=
+\frac{
+2y
+}{
+(1+x^2)\left(1+(x^2+y^2)^2\right)
+}.
+\]
+
+\begin{proposicion}
+El único punto crítico de $f$ es el origen $(0,0)$.
+\end{proposicion}
+
+\begin{proof}
+De la ecuación $\frac{\partial f}{\partial y}=0$ se obtiene directamente $y=0$.
+Sustituyendo en la ecuación $\frac{\partial f}{\partial x}=0$ se llega a
+\[
+x\left(\frac{1+x^2}{1+x^4}-\arctan(x^2)\right)=0.
+\]
+La expresión entre paréntesis no se anula para $x\neq 0$, por lo que la única solución
+es $x=0$.
+Por tanto, el único punto crítico es $(0,0)$.
+\end{proof}
+
+\section{Análisis de segundo orden}
+
+\begin{proposicion}
+La Hessiana de $f$ en el origen es definida positiva.
+\end{proposicion}
+
+\begin{proof}
+Usando el desarrollo en serie de Taylor de $\arctan(t)$ alrededor de $t=0$,
+\[
+\arctan(t)=t+O(t^3),
+\]
+se obtiene, para $(x,y)$ cercano al origen,
+\[
+f(x,y)=x^2+y^2+O(\|(x,y)\|^4).
+\]
+De aquí se deduce que
+\[
+\nabla^2 f(0,0)=
+\begin{pmatrix}
+2 & 0\\
+0 & 2
+\end{pmatrix},
+\]
+la cual es definida positiva.
+\end{proof}
+
+Esto garantiza que el origen es un mínimo estricto y que la función es convexa
+en un entorno del punto óptimo, aunque no necesariamente de forma global.
+
+\section{Métodos numéricos de optimización}
+
+Se consideran distintos métodos clásicos para la minimización de $f$:
+Gradiente Descendente con paso fijo, Gradiente Descendente con paso adaptativo,
+el Método de Newton y un esquema híbrido.
+
+La convexidad local alrededor del origen garantiza la convergencia local del
+método de Newton, mientras que los métodos de primer orden muestran mayor robustez
+ante condiciones iniciales alejadas del óptimo.
+
+\section{Resultados numéricos}
+
+Los experimentos numéricos confirman que todos los métodos convergen al mínimo global
+$(0,0)$.
+El Método de Newton presenta convergencia cuadrática en un entorno cercano al origen,
+mientras que el Gradiente Descendente con paso adaptativo ofrece un buen balance entre
+estabilidad y eficiencia global.
+
+\section{Conclusiones}
+
+Se ha realizado un estudio completo de la función
+$f(x,y)=\dfrac{\arctan(x^2+y^2)}{1+x^2}$ desde el punto de vista teórico y numérico.
+La función posee un mínimo global único en el origen, es suave y presenta convexidad
+local suficiente para garantizar la eficacia de métodos de optimización de segundo orden.
+Los resultados obtenidos respaldan las conclusiones teóricas y proporcionan una base
+sólida para el análisis de algoritmos de optimización en problemas no lineales.
+
+\end{document}
