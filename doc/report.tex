@@ -157,29 +157,129 @@ en un entorno del punto óptimo, aunque no necesariamente de forma global.
 
 \section{Métodos numéricos de optimización}
 
-Se consideran distintos métodos clásicos para la minimización de $f$:
-Gradiente Descendente con paso fijo, Gradiente Descendente con paso adaptativo,
-el Método de Newton y un esquema híbrido.
+En esta sección se describen los métodos numéricos empleados para la minimización
+de la función
+\[
+f(x,y)=\frac{\arctan(x^2+y^2)}{1+x^2}.
+\]
+El objetivo es explicar el fundamento teórico de cada algoritmo y justificar su
+uso en el contexto del problema estudiado.
 
-La convexidad local alrededor del origen garantiza la convergencia local del
-método de Newton, mientras que los métodos de primer orden muestran mayor robustez
-ante condiciones iniciales alejadas del óptimo.
+\subsection{Método de Gradiente Descendente}
+
+El método de Gradiente Descendente es un algoritmo iterativo de primer orden
+utilizado para minimizar funciones diferenciables. La idea central del método
+consiste en moverse, desde un punto inicial, en la dirección opuesta al gradiente
+de la función, ya que dicha dirección corresponde al máximo descenso local.
+
+La iteración del método está dada por
+\[
+x_{k+1} = x_k - \alpha \nabla f(x_k),
+\]
+donde $\alpha>0$ es un tamaño de paso fijo.
+
+Bajo hipótesis de suavidad de la función y para valores suficientemente pequeños
+de $\alpha$, el método converge localmente hacia un punto crítico. En el caso de
+la función estudiada, la existencia de un único mínimo global y la convexidad local
+alrededor del origen garantizan la convergencia del método cuando el punto inicial
+no se encuentra excesivamente alejado del óptimo.
+
+\subsection{Gradiente Descendente con paso adaptativo}
+
+Una desventaja del Gradiente Descendente con paso fijo es la sensibilidad del
+algoritmo a la elección del parámetro $\alpha$. Para mitigar este problema, se
+utiliza una versión con paso adaptativo, donde el tamaño del paso se ajusta en
+cada iteración.
+
+En este enfoque, el valor de $\alpha_k$ se selecciona de manera que se garantice
+una disminución suficiente del valor de la función objetivo, típicamente mediante
+criterios de búsqueda en línea como la condición de Armijo.
+
+Este método mantiene la simplicidad del Gradiente Descendente, pero mejora
+considerablemente su estabilidad y robustez, especialmente cuando el punto inicial
+se encuentra lejos del mínimo. Por esta razón, resulta adecuado para la optimización
+global de la función considerada.
+
+\subsection{Método de Newton}
+
+El Método de Newton es un algoritmo de segundo orden que utiliza información tanto
+del gradiente como de la Hessiana de la función objetivo. Su iteración está dada por
+\[
+x_{k+1} = x_k - [\nabla^2 f(x_k)]^{-1} \nabla f(x_k).
+\]
+
+Este método puede interpretarse como la minimización exacta de la aproximación
+cuadrática de la función en cada iteración. Si la Hessiana es definida positiva y
+el punto inicial se encuentra suficientemente cerca del mínimo, el Método de Newton
+presenta convergencia cuadrática.
+
+En el problema estudiado, la Hessiana de $f$ en el origen es definida positiva,
+lo cual justifica teóricamente la rápida convergencia observada del método en un
+entorno del mínimo global.
 
 \section{Resultados numéricos}
 
-Los experimentos numéricos confirman que todos los métodos convergen al mínimo global
-$(0,0)$.
-El Método de Newton presenta convergencia cuadrática en un entorno cercano al origen,
-mientras que el Gradiente Descendente con paso adaptativo ofrece un buen balance entre
-estabilidad y eficiencia global.
+Los experimentos numéricos se realizaron utilizando distintos puntos iniciales,
+tanto cercanos como alejados del origen, y un criterio de parada basado en
+\[
+\|\nabla f(x_k)\| < 10^{-6}.
+\]
+
+En el caso del Gradiente Descendente con paso fijo, se observó que la convergencia
+depende de manera crítica de la elección del tamaño de paso. Para valores pequeños
+del parámetro, el método converge al mínimo global $(0,0)$, aunque con una velocidad
+de convergencia lineal. Sin embargo, para valores de paso demasiado grandes, el
+algoritmo puede oscilar o incluso divergir, especialmente cuando el punto inicial
+se encuentra lejos del origen.
+
+El Gradiente Descendente con paso adaptativo mostró un comportamiento notablemente
+más robusto. En todos los experimentos realizados, el método logró converger al
+mínimo global, independientemente del punto inicial considerado. Este resultado
+se explica por el ajuste dinámico del tamaño de paso, que garantiza un descenso
+suficiente del valor de la función en cada iteración.
+
+Por su parte, el Método de Newton presentó convergencia cuadrática cuando el punto
+inicial se encontraba en un entorno suficientemente cercano al origen, en concordancia
+con la definición positiva de la Hessiana en el mínimo. No obstante, para puntos
+iniciales alejados, el método puede fallar, ya sea debido a una mala aproximación
+cuadrática de la función o a problemas asociados a la inversión de la Hessiana.
+Por ejemplo, al tomar puntos iniciales con valores grandes de $|x|$, el método
+puede generar iteraciones que no producen descenso del valor de la función.
+
+En conjunto, los resultados numéricos confirman que, aunque todos los métodos
+pueden converger al mínimo global bajo condiciones adecuadas, los métodos de primer
+orden con estrategias de paso adaptativo ofrecen mayor robustez global, mientras
+que el Método de Newton destaca por su alta eficiencia local.
 
 \section{Conclusiones}
 
-Se ha realizado un estudio completo de la función
-$f(x,y)=\dfrac{\arctan(x^2+y^2)}{1+x^2}$ desde el punto de vista teórico y numérico.
-La función posee un mínimo global único en el origen, es suave y presenta convexidad
-local suficiente para garantizar la eficacia de métodos de optimización de segundo orden.
-Los resultados obtenidos respaldan las conclusiones teóricas y proporcionan una base
-sólida para el análisis de algoritmos de optimización en problemas no lineales.
+En este trabajo se realizó un análisis teórico y numérico de la función
+\[
+f(x,y)=\frac{\arctan(x^2+y^2)}{1+x^2},
+\]
+desde la perspectiva de la Programación No Lineal. Se demostró que la función es
+suave en todo $\mathbb{R}^2$, posee un único mínimo global en el origen y presenta
+convexidad local en un entorno del punto óptimo.
+
+El estudio analítico permitió justificar rigurosamente la aplicabilidad de distintos
+métodos de optimización. En particular, la definición positiva de la Hessiana en el
+mínimo explica la rápida convergencia local del Método de Newton, mientras que la
+estructura global de la función pone de manifiesto las limitaciones de los métodos
+de segundo orden cuando se parte de puntos iniciales alejados del óptimo.
+
+Los experimentos numéricos confirmaron estas predicciones teóricas. Los métodos de
+primer orden, especialmente el Gradiente Descendente con paso adaptativo, mostraron
+una mayor robustez global, garantizando convergencia al mínimo bajo una amplia gama
+de condiciones iniciales. Por otro lado, el Método de Newton destacó por su alta
+eficiencia local, aunque su desempeño depende fuertemente de una buena elección del
+punto inicial.
+
+En conjunto, los resultados evidencian un principio fundamental de la optimización
+numérica: no existe un método universalmente superior, sino que la elección del
+algoritmo debe realizarse en función de las propiedades analíticas de la función
+objetivo y de la información disponible sobre el punto inicial. El análisis realizado
+proporciona un ejemplo concreto de cómo la teoría y la experimentación numérica se
+complementan para comprender el comportamiento real de los algoritmos de optimización
+en problemas no lineales.
 
 \end{document}
