@@ -251,6 +251,76 @@ pueden converger al mínimo global bajo condiciones adecuadas, los métodos de p
 orden con estrategias de paso adaptativo ofrecen mayor robustez global, mientras
 que el Método de Newton destaca por su alta eficiencia local.
 
+\section{Comparación de los algoritmos de optimización}
+
+Con el fin de evaluar el comportamiento práctico de los métodos de optimización
+estudiados, se realizaron experimentos numéricos desde un conjunto amplio de puntos
+iniciales distribuidos uniformemente en el plano. El análisis se centró en cuatro
+criterios fundamentales: tasa de convergencia global, dependencia del punto inicial,
+velocidad de convergencia y precisión final alcanzada.
+
+\subsection{Regiones de convergencia y dependencia del punto inicial}
+
+La Figura~\ref{fig:heatmap} muestra los mapas de calor asociados a la convergencia de
+cada algoritmo en función del punto inicial. Cada punto del plano se clasifica según
+si el método logra o no converger al mínimo global $(0,0)$ bajo el criterio de parada
+establecido.
+
+Se observa que el método de Gradiente Descendente con paso fijo presenta una región de
+convergencia extremadamente reducida, limitada a un entorno muy cercano al mínimo.
+Este comportamiento refleja su fuerte dependencia del tamaño de paso y su escasa
+robustez frente a elecciones iniciales desfavorables.
+
+Por el contrario, el Gradiente Descendente con paso adaptativo exhibe una región de
+convergencia significativamente más amplia, lo que indica una mayor estabilidad
+global. No obstante, la presencia de bandas donde el método no converge sugiere que
+la geometría anisotrópica de la función afecta el desempeño del algoritmo en ciertas
+direcciones del espacio.
+
+El Método de Newton converge únicamente desde un conjunto reducido de puntos
+iniciales, confirmando su carácter esencialmente local. Este resultado concuerda con
+la teoría, ya que el método depende de una buena aproximación cuadrática de la función
+en el entorno del mínimo.
+
+\subsection{Velocidad de convergencia y comportamiento dinámico}
+
+La Figura~\ref{fig:convergencia} presenta la evolución temporal de distintos indicadores
+numéricos para un punto inicial representativo. En particular, se analizan el valor
+de la función objetivo, la norma del gradiente y la distancia al óptimo.
+
+El Método de Newton muestra una disminución abrupta del error en pocas iteraciones,
+consistente con convergencia cuadrática cuando el punto inicial se encuentra en una
+región donde la Hessiana es definida positiva. Este comportamiento confirma la alta
+eficiencia local del método.
+
+El Gradiente Descendente con paso adaptativo presenta una convergencia más lenta,
+pero estable y monótona. A diferencia del paso fijo, el ajuste dinámico del tamaño de
+paso evita oscilaciones y garantiza una reducción progresiva del valor de la función.
+
+\subsection{Precisión final alcanzada}
+
+La Figura~\ref{fig:precision} muestra la distribución de la precisión final alcanzada
+en los experimentos exitosos, medida mediante $-\log_{10}(f(x,y))$. Los métodos de
+segundo orden alcanzan niveles de precisión superiores, aunque con una mayor
+variabilidad entre ejecuciones.
+
+El Método de Newton logra precisiones elevadas cuando converge, mientras que el
+Gradiente Descendente con paso adaptativo presenta resultados más consistentes,
+aunque ligeramente menos precisos. El método con paso fijo no produce resultados
+estadísticamente relevantes debido a su baja tasa de éxito global.
+
+\subsection{Discusión general}
+
+Los resultados numéricos ponen de manifiesto el compromiso clásico entre robustez
+global y rapidez de convergencia local. Los métodos de primer orden con estrategias
+adaptativas ofrecen una mayor estabilidad frente a la elección del punto inicial,
+mientras que los métodos de segundo orden son altamente eficientes en entornos
+favorables, pero sensibles a condiciones iniciales adversas.
+
+Este análisis confirma que la elección del algoritmo de optimización debe basarse no
+solo en su orden teórico de convergencia, sino también en la estructura global de la
+función objetivo y en la información disponible sobre el punto inicial.
+
 \section{Conclusiones}
 
 En este trabajo se realizó un análisis teórico y numérico de la función
